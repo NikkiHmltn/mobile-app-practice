@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -16,6 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 
 import {
@@ -25,87 +26,129 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import FlipCard from 'react-native-flip-card';
+import Swiper from 'react-native-deck-swiper';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+const Flashcard = ({question, answer}) => {
+  return(
+    <FlipCard
+      flip={false}
+      friction={6}
+      perspective={1000}
+      flipHorizontal={true}
+      flipVertical={false}
+      clickable={true}
+      style={styles.card}
+      alignHeight={true}
+      // alignWidth={true}
+    >
+      {/* Face Side */}
+      <View style={styles.face}>
+        <Text style={styles.question}>{question}</Text>
+      </View>
+      {/* Back Side */}
+      <View style={styles.back}>
+        <Text style={styles.answer}>{answer}</Text>
+      </View>
+    </FlipCard>
+  )
+}
+
+const App = () => {
+  const cards = [
+    {
+      question: "What does CORS stand for?",
+      answer: "Cross Origin Resource Sharing"
+    },
+    {
+      question: "What is Big O Notation?",
+      answer: "Algorithms that descript the complexity of code. "
+    },
+    {
+      question: "What is a stream?",
+      answer: "A sequence of data, like I/O"
+    },
+    {
+      question: "What are the four different OOPS principles?",
+      answer: "1) encapsulation 2) abstraction 3) inheritance 4) polymorphism"
+    },
+  ];
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.container}>
+      {/* <Flashcard question="What is your name?" answer="Nikki"/> */}
+        <Swiper
+            cards={cards}
+            renderCard={(card) => {
+                return (
+                    <Flashcard question={card.question} answer={card.answer} />
+                )
+            }}
+            cardIndex={0}
+            backgroundColor={'#ebd8b7'}
+            infinite = {true}
+            stackSize= {3}>
+        </Swiper>
     </View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ebd8b7'
   },
-  sectionTitle: {
+  face: {
+    flex: 1, 
+    backgroundColor: '#9a8194',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#9a8194",
+    elevation: 5,
+    padding: 30,
+  }, 
+  back: {
+    flex: 1,
+    backgroundColor: '#99bbad',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#99bbad",
+    elevation: 5,
+    padding: 30,
+  }, 
+  card: {
+    width: '100%',
+    flex: 1,
+  },
+  flashcard: {
+    flex: 1,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#ebd8b7",
+    justifyContent: "center",
+    backgroundColor: "#ebd8b7",
+    alignItems: "center",
+    elevation: 5,
+    
+  },
+  text: {
+    textAlign: "center",
+    fontSize: 50,
+    backgroundColor: "transparent",
+  },
+  answer: {
+    color: "white",
+    fontSize: 22,
+  },
+  question: {
+    color: "white",
     fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
   },
 });
 
